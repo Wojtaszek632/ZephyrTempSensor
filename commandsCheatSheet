@@ -1,0 +1,7 @@
+source ~/zephyrproject/.venv/bin/activate
+
+west build -b arduino_nano_33_ble samples/basic/blinky
+ 
+west flash --bossac=/home/wojciech/snap/arduino/70/.arduino15/packages/arduino/tools/bossac/1.9.1-arduino2/bossac
+
+

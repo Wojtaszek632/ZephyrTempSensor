@@ -1,0 +1,40 @@
+# Available runners configured by board.cmake.
+runners:
+- bossac
+- pyocd
+- blackmagicprobe
+- trace32
+
+# Default flash runner if --runner is not given.
+flash-runner: bossac
+
+# Default debug runner if --runner is not given.
+debug-runner: pyocd
+
+# Common runner configuration values.
+config:
+  board_dir: /home/wojciech/zephyrproject/zephyr/boards/arm/arduino_nano_33_ble
+  # Build outputs:
+  elf_file: zephyr.elf
+  hex_file: zephyr.hex
+  bin_file: zephyr.bin
+  # Host tools:
+  gdb: /home/wojciech/zephyr-sdk-0.15.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb
+  openocd: /home/wojciech/zephyr-sdk-0.15.2/sysroots/x86_64-pokysdk-linux/usr/bin/openocd
+  openocd_search:
+    - /home/wojciech/zephyr-sdk-0.15.2/sysroots/x86_64-pokysdk-linux/usr/share/openocd/scripts
+
+# Runner specific arguments
+args:
+  bossac:
+    - --bossac=/home/wojciech/zephyr-sdk-0.15.2/sysroots/x86_64-pokysdk-linux/usr/bin/bossac
+  pyocd:
+    - --dt-flash=y
+    - --target=nrf52840
+    - --frequency=4000000
+  blackmagicprobe:
+    []
+
+  trace32:
+    - --startup-args
+    - elfFile=/home/wojciech/zephyrproject/ZephyrTempSensor/build/zephyr/zephyr.elf
