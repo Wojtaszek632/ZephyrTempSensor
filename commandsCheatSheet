@@ -1,7 +1,30 @@
 source ~/zephyrproject/.venv/bin/activate
 
-west build -b arduino_nano_33_ble samples/basic/blinky
+west build -p auto -b arduino_nano_33_ble samples/basic/blinky
  
-west flash --bossac=/home/wojciech/snap/arduino/70/.arduino15/packages/arduino/tools/bossac/1.9.1-arduino2/bossac
+ Scanning...
+I2C device found at address 0x76  !
+done
+----------------------------------------------------------------------------
 
+west build -p auto -b arduino_nano_33_ble samples/bluetooth/peripheral_esp -- -DDTC_OVERLAY_FILE=arduino_i2c.overlay
+
+west build -p auto -b arduino_nano_33_ble samples/sensor/bme280 -- -DDTC_OVERLAY_FILE=arduino_i2c.overlay
+
+
+west build -p auto -b arduino_nano_33_ble samples/sensor/bme28022 -- -DDTC_OVERLAY_FILE=arduino_i2c.overlay
+
+west build -p auto -b arduino_nano_33_ble ~/ZephyrTempSensor/
+
+west build -p auto -b arduino_nano_33_ble samples/subsys/usb/console
+
+west build -p auto -b arduino_nano_33_ble samples/hello_world
+
+west flash --bossac=/home/wojciech/snap/arduino/85/.arduino15/packages/arduino/tools/bossac/1.9.1-arduino2/bossac
+--------------------------------------------------------------------------------
+
+west build -p auto -b arduino_nano_33_ble zephprj -- -DDTC_OVERLAY_FILE=arduino_i2c.overlay
+
+
+west flash --bossac=/home/wojciech/snap/arduino/85/.arduino15/packages/arduino/tools/bossac/1.9.1-arduino2/bossac
 
