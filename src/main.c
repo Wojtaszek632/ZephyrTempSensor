@@ -131,33 +131,30 @@ static void update_preassure(struct bt_conn *conn,
 	bt_gatt_notify(conn, chrc, &value, sizeof(value));
 }
 BT_GATT_SERVICE_DEFINE(ess_svc,
+	//gatt_attrb_indx = 0
+	BT_GATT_PRIMARY_SERVICE(BT_UUID_ESS), 				
 
-	BT_GATT_PRIMARY_SERVICE(BT_UUID_ESS),
-
-	/* Temperature Sensor */
-	BT_GATT_CHARACTERISTIC(BT_UUID_TEMPERATURE,
+	/* Temperature Sensor */ //gatt_attrb_indx = 1 & 2
+	BT_GATT_CHARACTERISTIC(BT_UUID_TEMPERATURE, 		
 			       BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
 			       BT_GATT_PERM_READ,
 			       read_u16, NULL, &sensor_1.temp_value),
-				   BT_GATT_CCC(temp_ccc_cfg_changed,
-		    BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
-	
-	BT_GATT_CUD(SENSOR_1_NAME, BT_GATT_PERM_READ),
-	
-	
-
-	
-	/* Preassure Sensor */	
-	BT_GATT_CHARACTERISTIC(BT_UUID_PRESSURE,
+	//gatt_attrb_indx = 3
+	BT_GATT_CCC(temp_ccc_cfg_changed, 					
+		    	   BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+	//gatt_attrb_indx = 4
+	BT_GATT_CUD(SENSOR_1_NAME, BT_GATT_PERM_READ), 		
+		
+	/* Preassure Sensor */	//gatt_attrb_indx = 5 & 6
+	BT_GATT_CHARACTERISTIC(BT_UUID_PRESSURE, 			
 			       BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
 			       BT_GATT_PERM_READ,
 			       read_u32, NULL, &sensor_3.press_value),
-				   BT_GATT_CCC(press_ccc_cfg_changed,
-		    BT_GATT_PERM_READ | BT_GATT_PERM_WRITE), 
-	
-	BT_GATT_CUD(SENSOR_3_NAME, BT_GATT_PERM_READ),
-	
-	 
+    //gatt_attrb_indx = 7
+	BT_GATT_CCC(press_ccc_cfg_changed,					
+		   		   BT_GATT_PERM_READ | BT_GATT_PERM_WRITE), 
+	//gatt_attrb_indx = 8
+	BT_GATT_CUD(SENSOR_3_NAME, BT_GATT_PERM_READ), 	  
 );
 
 static const struct bt_data ad[] = {
@@ -266,11 +263,13 @@ void main(void)
 		sensor_channel_get(dev, SENSOR_CHAN_AMBIENT_TEMP, &temp);
 		sensor_channel_get(dev, SENSOR_CHAN_PRESS, &press);
 		
+		/* Temperature Sensor */ //gatt_attrb_indx = 1 & 2
 		update_temperature(NULL, &ess_svc.attrs[2], 
 						temp.val1 * 100 + temp.val2 / 10000, 
 						&sensor_1);
 
-		update_preassure(NULL, &ess_svc.attrs[3],
+		/* Preassure Sensor */	//gatt_attrb_indx = 5 & 6
+		update_preassure(NULL, &ess_svc.attrs[6],
 						press.val1 * 10000 + press.val2 / 100,
 		 				&sensor_3);
 		
